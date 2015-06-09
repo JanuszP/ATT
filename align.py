@@ -83,7 +83,6 @@ def main():
   for signal in aligner.GetSignals():
     signal.LogStateDebug()
 
-  LogDebug("[align.py] aligning...")
   MkdirIfNotExists(args.output_folder)
   identifiers = list(corpus.GetMultilingualDocumentIdentifiers())
   LogDebug("[align.py] %d document(s) to align..." % len(identifiers))
@@ -96,6 +95,19 @@ def main():
         '%s.tmx' % StripNonFilenameCharacters(identifier))
 
     mdoc = corpus.GetMultilingualDocument(identifier)
+
+    LogDebug("[align.py] aligning document %s, languages: %s", identifier, mdoc.GetLanguages())
+
+    alignerDocMatchingLanguages = 0
+    for alignerLang in aligner.GetLanguages():
+      for docLang in mdoc.GetLanguages():
+        if alignerLang == docLang:
+          alignerDocMatchingLanguages += 1
+          break
+
+    if alignerDocMatchingLanguages < 2:
+      LogDebug("[align.py] skipping document %s, not enough languages, aligner supports: %s, document has: %s" % (identifier, aligner.GetLanguages(), mdoc.GetLanguages()))
+      continue
 
     lengths = [mdoc.NumSentences(language) for language in mdoc.GetLanguages()]
 
