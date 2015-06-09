@@ -6,6 +6,9 @@ class Aligner(object):
   def __init__(self, config={}):
     pass
 
+  def GetLanguages(self):
+    return self._languages
+
   def Align(self, multilingual_document):
     raise NotImplementedError()
 
