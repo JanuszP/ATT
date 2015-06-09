@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import math
 import sys
 import nltk
 import argparse
@@ -40,6 +41,12 @@ def main():
                       help="If |min document length - max document length| > |average document length| * " +
                            "length_difference_threshold, the document will be ignored.",
                       default=None)
+  parser.add_argument('--split_parts',
+                      help="Number of parts into which aligned documents should be splitted.",
+                      default=1)
+  parser.add_argument('--split_part_number',
+                      help="Number of split part.",
+                      default=1)
   parser.add_argument('--verbose', '-v',
                       action='count',
                       default=0,
@@ -79,24 +86,39 @@ def main():
   else:
     assert(False)
 
+  if int(args.split_parts) < 1 or int(args.split_part_number) < 1 or int(args.split_parts) < int(args.split_part_number):
+    raise Exception("Invalid values for either split_parts (%s) should be >= 1 or split_part_number (%s) should be <= split_parts and >= 1" % (args.split_parts, args.split_part_number))
+
+  splitParts = int(args.split_parts)
+  splitPartNumber = int(args.split_part_number)
+
   LogDebug("[align.py] signal states:")
   for signal in aligner.GetSignals():
     signal.LogStateDebug()
 
   MkdirIfNotExists(args.output_folder)
-  identifiers = list(corpus.GetMultilingualDocumentIdentifiers())
+  allIdentifiers = list(corpus.GetMultilingualDocumentIdentifiers())
+  allIdentifiers.sort()
+
+  partSize = int( math.ceil( float( len(allIdentifiers) ) / splitParts ) )
+
+  identifiers = allIdentifiers[ (splitPartNumber - 1) * partSize : splitPartNumber * partSize ]
+
+
   LogDebug("[align.py] %d document(s) to align..." % len(identifiers))
   eta_clock = ETAClock(0, len(identifiers), "Aligning corpus")
   verifications = []
+  docNumber = 0
   for identifier in identifiers:
     eta_clock.Tick()
+    docNumber += 1
     output_path = os.path.join(
         args.output_folder,
         '%s.tmx' % StripNonFilenameCharacters(identifier))
 
     mdoc = corpus.GetMultilingualDocument(identifier)
 
-    LogDebug("[align.py] aligning document %s, languages: %s", identifier, mdoc.GetLanguages())
+    LogDebug("[align.py] %d of %d, aligning document %s, languages: %s", docNumber, len(identifiers), identifier, mdoc.GetLanguages())
 
     alignerDocMatchingLanguages = 0
     for alignerLang in aligner.GetLanguages():
