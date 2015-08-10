@@ -1,0 +1,13 @@
+class: CFSDictionary
+path: '/data/CFS-dicts' # ścieżka do danych słownika CFS - np. stąd:
+                  # http://kazet.world-domination.net/cfs.tar.gz
+languages:
+  - "de"
+  - "en"
+  - "es"
+  - "fr"
+  - "hr"
+  - "it"
+  - "la"
+  - "pl"
+  - "pt"

@@ -1,0 +1,16 @@
+class: CorpusPlain
+languages:
+  - "de"
+  - "en"
+  - "it"
+  - "pl"
+  - "es"
+  - "fr"
+  - "hr"
+  - "it"
+  - "la"
+  - "pl"
+  - "pt"
+data_location: "/data/vatican_splitted"
+                # dla Watykanu podzielony na zdania jest
+                # tu: http://kazet.world-domination.net/splitted.tar.gz

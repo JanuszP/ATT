@@ -1,0 +1,9 @@
+class: CorpusHead
+n: 200
+corpus:
+  class: CorpusTMX
+  languages:
+    - "en"
+    - "pl"
+    - "fr"
+  data_location: "/home/janusz/workdir/krzysiek/data/dgt"

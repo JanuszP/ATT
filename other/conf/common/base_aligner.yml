@@ -1,0 +1,20 @@
+class: CombinedDynamicSentenceSimilarityAligner
+temp_dir: "/tmp"
+pivot_operand: OR
+pivot_size: 1
+
+signals:
+  - class: DictionaryWordsSignal
+  - class: CommonTokensSignal
+  - class: SizeRatioSignal
+
+verification_signals:
+  - class: DictionaryWordsSignal
+  - class: CommonTokensSignal
+  - class: SizeRatioSignal
+
+#languages:
+#  - "pl"
+#  - "en"
+#  - "it"
+#  - "de"
