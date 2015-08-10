@@ -30,6 +30,7 @@ setup(
     'att/language',
     'att/classifier'],
   install_requires = [
+    'logilab-common<=0.63.0',
     'lxml',
     'pyyaml',
     'nltk',
